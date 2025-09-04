@@ -1,6 +1,8 @@
 import React from "react";
 import { Box, Paper, Typography, Avatar } from '@mui/material';
 import { Person, SmartToy } from '@mui/icons-material';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import type { ChatMessage as ChatMessageType } from "../../types/api";
 
 interface ChatMessageProps {
@@ -46,9 +48,117 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
             borderRadius: 2,
           }}
         >
-          <Typography variant="body1" sx={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
-            {message.content}
-          </Typography>
+          {isUser ? (
+            <Typography variant="body1" sx={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
+              {message.content}
+            </Typography>
+          ) : (
+            <Box sx={{ '& > *:first-of-type': { mt: 0 }, '& > *:last-child': { mb: 0 } }}>
+              <ReactMarkdown
+                remarkPlugins={[remarkGfm]}
+                components={{
+                  img: ({ src, alt, ...props }) => (
+                    <Box
+                      component="img"
+                      src={src}
+                      alt={alt}
+                      sx={{
+                        maxWidth: '100%',
+                        height: 'auto',
+                        borderRadius: 1,
+                        my: 1,
+                      }}
+                      {...props}
+                    />
+                  ),
+                  p: ({ children }) => (
+                    <Typography variant="body1" sx={{ mb: 1, '&:last-child': { mb: 0 } }}>
+                      {children}
+                    </Typography>
+                  ),
+                  h1: ({ children }) => (
+                    <Typography variant="h4" sx={{ mb: 1, mt: 2, '&:first-of-type': { mt: 0 } }}>
+                      {children}
+                    </Typography>
+                  ),
+                  h2: ({ children }) => (
+                    <Typography variant="h5" sx={{ mb: 1, mt: 2, '&:first-of-type': { mt: 0 } }}>
+                      {children}
+                    </Typography>
+                  ),
+                  h3: ({ children }) => (
+                    <Typography variant="h6" sx={{ mb: 1, mt: 2, '&:first-of-type': { mt: 0 } }}>
+                      {children}
+                    </Typography>
+                  ),
+                  code: ({ children, className }) => {
+                    const inline = !className;
+                    return inline ? (
+                      <Box
+                        component="code"
+                        sx={{
+                          bgcolor: 'grey.100',
+                          px: 0.5,
+                          py: 0.25,
+                          borderRadius: 0.5,
+                          fontFamily: 'monospace',
+                          fontSize: '0.875em',
+                        }}
+                      >
+                        {children}
+                      </Box>
+                    ) : (
+                      <Box
+                        component="pre"
+                        sx={{
+                          bgcolor: 'grey.100',
+                          p: 2,
+                          borderRadius: 1,
+                          overflow: 'auto',
+                          my: 1,
+                        }}
+                      >
+                        <Box component="code" sx={{ fontFamily: 'monospace' }}>
+                          {children}
+                        </Box>
+                      </Box>
+                    );
+                  },
+                  ul: ({ children }) => (
+                    <Box component="ul" sx={{ pl: 2, my: 1 }}>
+                      {children}
+                    </Box>
+                  ),
+                  ol: ({ children }) => (
+                    <Box component="ol" sx={{ pl: 2, my: 1 }}>
+                      {children}
+                    </Box>
+                  ),
+                  li: ({ children }) => (
+                    <Typography component="li" variant="body1" sx={{ mb: 0.5 }}>
+                      {children}
+                    </Typography>
+                  ),
+                  blockquote: ({ children }) => (
+                    <Box
+                      sx={{
+                        borderLeft: 4,
+                        borderColor: 'primary.main',
+                        pl: 2,
+                        ml: 1,
+                        my: 1,
+                        fontStyle: 'italic',
+                      }}
+                    >
+                      {children}
+                    </Box>
+                  ),
+                }}
+              >
+                {message.content}
+              </ReactMarkdown>
+            </Box>
+          )}
           <Typography
             variant="caption"
             sx={{
