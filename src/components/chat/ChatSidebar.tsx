@@ -33,8 +33,8 @@ import {
   usePinChat,
   useUnpinChat,
   useCreateChat,
-} from "../../hooks/useChat";
-import { useSignOut } from "../../hooks/useAuth";
+} from "../../hooks/chat/useChat";
+import { useSignOut } from "../../hooks/auth/useAuth";
 import { useSnackbar } from "../../contexts/SnackbarContext";
 
 const SIDEBAR_WIDTH = 320;
@@ -62,7 +62,7 @@ export const ChatSidebar: React.FC = () => {
       const response = await createChat.mutateAsync();
       navigate(`/chat/${response.data.chatId}`);
     } catch (error) {
-      console.error('Error creating chat:', error);
+      console.error("Error creating chat:", error);
     }
   };
 

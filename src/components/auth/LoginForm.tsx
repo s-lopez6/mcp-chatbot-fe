@@ -11,7 +11,7 @@ import {
   Avatar,
 } from "@mui/material";
 import { ChatBubbleOutline } from "@mui/icons-material";
-import { useSignIn } from "../../hooks/useAuth";
+import { useSignIn } from "../../hooks/auth/useAuth";
 import { env } from "../../config/env";
 
 export const LoginForm: React.FC = () => {

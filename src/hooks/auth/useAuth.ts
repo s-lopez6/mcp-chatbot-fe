@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { authApi } from "../services/api";
-import { useAuthStore } from "../store/authStore";
-import type { SignInDto } from "../types/api";
+import { authApi } from "../../services/api";
+import { useAuthStore } from "../../store/authStore";
+import type { SignInDto } from "../../types/api";
 
 export const useSignIn = () => {
   const { signIn, setLoading } = useAuthStore();
@@ -19,7 +19,7 @@ export const useSignIn = () => {
 };
 
 export const useCheckStatus = () => {
-  const { updateUser, signOut } = useAuthStore();
+  const { updateUser } = useAuthStore();
   const token = useAuthStore((state) => state.token);
 
   return useQuery({
@@ -31,9 +31,6 @@ export const useCheckStatus = () => {
     },
     enabled: !!token,
     retry: false,
-    onError: () => {
-      signOut();
-    },
   });
 };
 

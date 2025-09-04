@@ -1,14 +1,13 @@
-import React from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
-import { Box, CircularProgress, Typography } from '@mui/material';
-import { useAuthStore } from './store/authStore';
-import { useCheckStatus } from './hooks/useAuth';
-import { LoginForm } from './components/auth/LoginForm';
-import { ChatLayout } from './components/layout/ChatLayout';
+import { Routes, Route, Navigate } from "react-router-dom";
+import { Box, CircularProgress, Typography } from "@mui/material";
+import { useAuthStore } from "./store/authStore";
+import { useCheckStatus } from "./hooks/auth/useAuth";
+import { LoginForm } from "./components/auth/LoginForm";
+import { ChatLayout } from "./components/layout/ChatLayout";
 
 function App() {
   const { isAuthenticated, isLoading: authLoading } = useAuthStore();
-  
+
   // Check authentication status on app load
   useCheckStatus();
 
@@ -16,11 +15,11 @@ function App() {
     return (
       <Box
         sx={{
-          minHeight: '100vh',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          flexDirection: 'column',
+          minHeight: "100vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          flexDirection: "column",
           gap: 2,
         }}
       >

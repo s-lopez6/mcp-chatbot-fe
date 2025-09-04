@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { chatApi, historyApi } from "../services/api";
-import { useChatStore } from "../store/chatStore";
+import { chatApi, historyApi } from "../../services/api";
+import { useChatStore } from "../../store/chatStore";
 import type {
   CreateCompletionDto,
   CreateCompletionPromptDto,
@@ -8,7 +8,7 @@ import type {
   ChatMessage,
   FindAllResponseDto,
   FindOneResponseDto,
-} from "../types/api";
+} from "../../types/api";
 import type { AxiosResponse } from "axios";
 
 export const useCreateChat = () => {
@@ -121,11 +121,11 @@ export const useGetChat = (chatId: string) => {
         setCurrentChat(null);
         return null;
       }
-      
+
       const response = await historyApi.getChat(chatId);
       const chatData = response.data;
       const messages: ChatMessage[] = [];
-      
+
       // For each message from the API, create both user and assistant messages
       chatData.messages.forEach((msg) => {
         // Add user message (prompt)
@@ -135,7 +135,7 @@ export const useGetChat = (chatId: string) => {
           role: "user" as const,
           timestamp: msg.createdAt,
         });
-        
+
         // Add assistant message (response)
         messages.push({
           id: msg.messageId,
@@ -145,7 +145,7 @@ export const useGetChat = (chatId: string) => {
           feedback: msg.feedback,
         });
       });
-      
+
       const chat: Chat = {
         id: chatData.id,
         title: chatData.title,
@@ -159,7 +159,7 @@ export const useGetChat = (chatId: string) => {
     },
     enabled: !!chatId,
     staleTime: 0, // Always refetch when switching chats
-    refetchOnMount: 'always', // Always refetch when component mounts
+    refetchOnMount: "always", // Always refetch when component mounts
   });
 };
 

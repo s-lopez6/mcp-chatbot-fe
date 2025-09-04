@@ -50,6 +50,7 @@ export const useAuthStore = create<AuthStore>()(
         });
       },
     })),
+    // localStorage
     {
       name: "auth-storage",
       partialize: (state) => ({
