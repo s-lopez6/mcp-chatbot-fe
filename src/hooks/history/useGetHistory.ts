@@ -3,6 +3,7 @@ import { historyApi } from "../../services/api";
 import { useChatStore } from "../../store/chatStore";
 import type { Chat } from "../../types/api";
 import { QUERY_KEYS } from "../queryKeys";
+import { GetHistoryMapper } from "./mappers/get-history.mapper";
 
 export const useGetHistory = (params?: { limit?: number; offset?: number }) => {
   const { setChats } = useChatStore();
@@ -11,14 +12,9 @@ export const useGetHistory = (params?: { limit?: number; offset?: number }) => {
     queryKey: [QUERY_KEYS.CHATS, params],
     queryFn: async () => {
       const response = await historyApi.getHistory(params);
-      const chats: Chat[] = response.data.map((item) => ({
-        id: item.id,
-        title: item.title,
-        messages: [],
-        createdAt: item.lastMessageAt,
-        updatedAt: item.lastMessageAt,
-        isPinned: !!item.pinDate,
-      }));
+      const chats: Chat[] = response.data.map((item) =>
+        GetHistoryMapper.responseToChat(item)
+      );
       setChats(chats);
       return response;
     },
