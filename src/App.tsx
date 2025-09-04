@@ -1,9 +1,9 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import { Box, CircularProgress, Typography } from "@mui/material";
 import { useAuthStore } from "./store/authStore";
-import { useCheckStatus } from "./hooks/auth/useAuth";
 import { LoginForm } from "./components/auth/LoginForm";
 import { ChatLayout } from "./components/layout/ChatLayout";
+import { useCheckStatus } from "./hooks/auth/useCheckStatus";
 
 function App() {
   const { isAuthenticated, isLoading: authLoading } = useAuthStore();

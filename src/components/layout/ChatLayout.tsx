@@ -3,8 +3,8 @@ import { useParams } from "react-router-dom";
 import { Box } from "@mui/material";
 import { ChatSidebar } from "../chat/ChatSidebar";
 import { ChatInterface } from "../chat/ChatInterface";
-import { useGetChat } from "../../hooks/chat/useChat";
 import { useChatStore } from "../../store/chatStore";
+import { useGetChat } from "../../hooks/history/useGetChat";
 
 export const ChatLayout: React.FC = () => {
   const { chatId } = useParams<{ chatId?: string }>();

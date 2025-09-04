@@ -11,8 +11,9 @@ import { ChatBubbleOutline } from "@mui/icons-material";
 import { ChatMessage } from "./ChatMessage";
 import { ChatInput } from "./ChatInput";
 import { useChatStore } from "../../store/chatStore";
-import { useCreateCompletion, useCreateChat } from "../../hooks/chat/useChat";
 import { env } from "../../config/env";
+import { useCreateChat } from "../../hooks/chat/useCreateChat";
+import { useCreateCompletion } from "../../hooks/chat/useCreateCompletion";
 
 export const ChatInterface: React.FC = () => {
   const { chatId } = useParams<{ chatId?: string }>();

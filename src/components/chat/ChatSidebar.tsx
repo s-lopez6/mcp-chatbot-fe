@@ -27,15 +27,13 @@ import {
 } from "@mui/icons-material";
 import { useChatStore } from "../../store/chatStore";
 import { useAuthStore } from "../../store/authStore";
-import {
-  useGetHistory,
-  useDeleteChat,
-  usePinChat,
-  useUnpinChat,
-  useCreateChat,
-} from "../../hooks/chat/useChat";
-import { useSignOut } from "../../hooks/auth/useAuth";
 import { useSnackbar } from "../../contexts/SnackbarContext";
+import { useCreateChat } from "../../hooks/chat/useCreateChat";
+import { useGetHistory } from "../../hooks/history/useGetHistory";
+import { useDeleteChat } from "../../hooks/history/useDeleteChat";
+import { usePinChat } from "../../hooks/history/usePinChat";
+import { useUnpinChat } from "../../hooks/history/useUnpinChat";
+import { useSignOut } from "../../hooks/auth/useSignOut";
 
 const SIDEBAR_WIDTH = 320;
 
