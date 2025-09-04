@@ -119,16 +119,32 @@ export const useGetChat = (chatId: string) => {
     queryFn: async () => {
       const response = await historyApi.getChat(chatId);
       const chatData = response.data;
-      const chat: Chat = {
-        id: chatData.id,
-        title: chatData.title,
-        messages: chatData.messages.map((msg) => ({
+      const messages: ChatMessage[] = [];
+      
+      // For each message from the API, create both user and assistant messages
+      chatData.messages.forEach((msg) => {
+        // Add user message (prompt)
+        messages.push({
+          id: `${msg.messageId}-user`,
+          content: msg.prompt,
+          role: "user" as const,
+          timestamp: msg.createdAt,
+        });
+        
+        // Add assistant message (response)
+        messages.push({
           id: msg.messageId,
           content: msg.response,
           role: "assistant" as const,
           timestamp: msg.createdAt,
           feedback: msg.feedback,
-        })),
+        });
+      });
+      
+      const chat: Chat = {
+        id: chatData.id,
+        title: chatData.title,
+        messages,
         createdAt: chatData.createdAt,
         updatedAt: chatData.updatedAt,
         isPinned: !!chatData.pinDate,

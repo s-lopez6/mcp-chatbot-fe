@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   Box,
   Drawer,
@@ -14,7 +14,7 @@ import {
   Avatar,
   Paper,
   Chip,
-} from '@mui/material';
+} from "@mui/material";
 import {
   Add,
   ChatBubbleOutline,
@@ -23,12 +23,18 @@ import {
   Delete,
   Logout,
   Person,
-} from '@mui/icons-material';
-import { useChatStore } from '../../store/chatStore';
-import { useAuthStore } from '../../store/authStore';
-import { useGetHistory, useDeleteChat, usePinChat, useUnpinChat, useCreateChat } from '../../hooks/useChat';
-import { useSignOut } from '../../hooks/useAuth';
-import { useSnackbar } from '../../contexts/SnackbarContext';
+} from "@mui/icons-material";
+import { useChatStore } from "../../store/chatStore";
+import { useAuthStore } from "../../store/authStore";
+import {
+  useGetHistory,
+  useDeleteChat,
+  usePinChat,
+  useUnpinChat,
+  useCreateChat,
+} from "../../hooks/useChat";
+import { useSignOut } from "../../hooks/useAuth";
+import { useSnackbar } from "../../contexts/SnackbarContext";
 
 interface ChatSidebarProps {
   onSelectChat: (chatId: string) => void;
@@ -41,7 +47,7 @@ export const ChatSidebar: React.FC<ChatSidebarProps> = ({ onSelectChat }) => {
   const { user } = useAuthStore();
   const signOut = useSignOut();
   const { showConfirm } = useSnackbar();
-  
+
   const { data: historyData, isLoading } = useGetHistory();
   const createChat = useCreateChat();
   const deleteChat = useDeleteChat();
@@ -58,13 +64,16 @@ export const ChatSidebar: React.FC<ChatSidebarProps> = ({ onSelectChat }) => {
 
   const handleDeleteChat = (chatId: string, e: React.MouseEvent) => {
     e.stopPropagation();
-    showConfirm(
-      '¿Estás seguro de que quieres eliminar este chat?',
-      () => deleteChat.mutate(chatId)
+    showConfirm("¿Estás seguro de que quieres eliminar este chat?", () =>
+      deleteChat.mutate(chatId)
     );
   };
 
-  const handlePinToggle = (chatId: string, isPinned: boolean, e: React.MouseEvent) => {
+  const handlePinToggle = (
+    chatId: string,
+    isPinned: boolean,
+    e: React.MouseEvent
+  ) => {
     e.stopPropagation();
     if (isPinned) {
       unpinChat.mutate(chatId);
@@ -73,8 +82,8 @@ export const ChatSidebar: React.FC<ChatSidebarProps> = ({ onSelectChat }) => {
     }
   };
 
-  const pinnedChats = chats.filter(chat => chat.isPinned);
-  const unpinnedChats = chats.filter(chat => !chat.isPinned);
+  const pinnedChats = chats.filter((chat) => chat.isPinned);
+  const unpinnedChats = chats.filter((chat) => !chat.isPinned);
 
   const ChatListItem = ({ chat }: { chat: any }) => (
     <ListItem disablePadding sx={{ mb: 0.5 }}>
@@ -84,11 +93,11 @@ export const ChatSidebar: React.FC<ChatSidebarProps> = ({ onSelectChat }) => {
         sx={{
           borderRadius: 2,
           mx: 1,
-          '&.Mui-selected': {
-            bgcolor: 'primary.light',
-            color: 'primary.contrastText',
-            '&:hover': {
-              bgcolor: 'primary.main',
+          "&.Mui-selected": {
+            bgcolor: "primary.light",
+            color: "primary.contrastText",
+            "&:hover": {
+              bgcolor: "primary.main",
             },
           },
         }}
@@ -108,18 +117,25 @@ export const ChatSidebar: React.FC<ChatSidebarProps> = ({ onSelectChat }) => {
             </Typography>
           }
         />
-        <Box sx={{ display: 'flex', gap: 0.5 }}>
+        <Box sx={{ display: "flex", gap: 0.5 }}>
           <IconButton
             size="small"
             onClick={(e) => handlePinToggle(chat.id, chat.isPinned, e)}
-            sx={{ opacity: 0.7, '&:hover': { opacity: 1 } }}
+            sx={{ opacity: 0.7, "&:hover": { opacity: 1 } }}
           >
-            {chat.isPinned ? <PushPin fontSize="small" /> : <PushPinOutlined fontSize="small" />}
+            {chat.isPinned ? (
+              <PushPin fontSize="small" />
+            ) : (
+              <PushPinOutlined fontSize="small" />
+            )}
           </IconButton>
           <IconButton
             size="small"
             onClick={(e) => handleDeleteChat(chat.id, e)}
-            sx={{ opacity: 0.7, '&:hover': { opacity: 1, color: 'error.main' } }}
+            sx={{
+              opacity: 0.7,
+              "&:hover": { opacity: 1, color: "error.main" },
+            }}
           >
             <Delete fontSize="small" />
           </IconButton>
@@ -134,21 +150,28 @@ export const ChatSidebar: React.FC<ChatSidebarProps> = ({ onSelectChat }) => {
       sx={{
         width: SIDEBAR_WIDTH,
         flexShrink: 0,
-        '& .MuiDrawer-paper': {
+        "& .MuiDrawer-paper": {
           width: SIDEBAR_WIDTH,
-          boxSizing: 'border-box',
-          bgcolor: 'background.default',
+          boxSizing: "border-box",
+          bgcolor: "background.default",
           borderRight: 1,
-          borderColor: 'divider',
+          borderColor: "divider",
         },
       }}
     >
-      <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+      <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
         {/* Header */}
-        <Paper elevation={0} sx={{ p: 2, bgcolor: 'background.paper' }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <Avatar sx={{ width: 32, height: 32, bgcolor: 'primary.main' }}>
+        <Paper elevation={0} sx={{ p: 2, bgcolor: "background.paper" }}>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              mb: 2,
+            }}
+          >
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+              <Avatar sx={{ width: 32, height: 32, bgcolor: "primary.main" }}>
                 <Person fontSize="small" />
               </Avatar>
               <Typography variant="subtitle2" noWrap>
@@ -159,7 +182,7 @@ export const ChatSidebar: React.FC<ChatSidebarProps> = ({ onSelectChat }) => {
               <Logout fontSize="small" />
             </IconButton>
           </Box>
-          
+
           <Button
             fullWidth
             variant="contained"
@@ -175,9 +198,9 @@ export const ChatSidebar: React.FC<ChatSidebarProps> = ({ onSelectChat }) => {
         <Divider />
 
         {/* Chat List */}
-        <Box sx={{ flex: 1, overflow: 'auto' }}>
+        <Box sx={{ flex: 1, overflow: "auto" }}>
           {isLoading ? (
-            <Box sx={{ p: 2, textAlign: 'center' }}>
+            <Box sx={{ p: 2, textAlign: "center" }}>
               <Typography variant="body2" color="text.secondary">
                 Loading chats...
               </Typography>
@@ -187,14 +210,14 @@ export const ChatSidebar: React.FC<ChatSidebarProps> = ({ onSelectChat }) => {
               {/* Pinned Chats */}
               {pinnedChats.length > 0 && (
                 <>
-                  <ListItem>
+                  {/* <ListItem>
                     <Chip
                       label="Pinned"
                       size="small"
                       variant="outlined"
                       sx={{ fontSize: '0.75rem' }}
                     />
-                  </ListItem>
+                  </ListItem> */}
                   {pinnedChats.map((chat) => (
                     <ChatListItem key={chat.id} chat={chat} />
                   ))}
@@ -205,7 +228,7 @@ export const ChatSidebar: React.FC<ChatSidebarProps> = ({ onSelectChat }) => {
               {/* Regular Chats */}
               {unpinnedChats.length > 0 && (
                 <>
-                  {pinnedChats.length > 0 && (
+                  {/* {pinnedChats.length > 0 && (
                     <ListItem>
                       <Chip
                         label="Recent"
@@ -214,7 +237,7 @@ export const ChatSidebar: React.FC<ChatSidebarProps> = ({ onSelectChat }) => {
                         sx={{ fontSize: '0.75rem' }}
                       />
                     </ListItem>
-                  )}
+                  )} */}
                   {unpinnedChats.map((chat) => (
                     <ChatListItem key={chat.id} chat={chat} />
                   ))}
@@ -222,8 +245,10 @@ export const ChatSidebar: React.FC<ChatSidebarProps> = ({ onSelectChat }) => {
               )}
 
               {chats.length === 0 && !isLoading && (
-                <Box sx={{ p: 3, textAlign: 'center' }}>
-                  <ChatBubbleOutline sx={{ fontSize: 48, color: 'text.disabled', mb: 2 }} />
+                <Box sx={{ p: 3, textAlign: "center" }}>
+                  <ChatBubbleOutline
+                    sx={{ fontSize: 48, color: "text.disabled", mb: 2 }}
+                  />
                   <Typography variant="body2" color="text.secondary">
                     No chats yet
                   </Typography>
