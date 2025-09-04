@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ThemeProvider } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
 import { theme } from './theme/theme';
+import { GlobalSnackbarProvider } from './components/common/SnackbarProvider';
 import './index.css';
 import App from './App.tsx';
 
@@ -21,7 +22,9 @@ createRoot(document.getElementById('root')!).render(
     <QueryClientProvider client={queryClient}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <App />
+        <GlobalSnackbarProvider>
+          <App />
+        </GlobalSnackbarProvider>
       </ThemeProvider>
     </QueryClientProvider>
   </StrictMode>,

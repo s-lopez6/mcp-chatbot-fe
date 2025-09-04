@@ -28,6 +28,7 @@ import { useChatStore } from '../../store/chatStore';
 import { useAuthStore } from '../../store/authStore';
 import { useGetHistory, useDeleteChat, usePinChat, useUnpinChat, useCreateChat } from '../../hooks/useChat';
 import { useSignOut } from '../../hooks/useAuth';
+import { useSnackbar } from '../../contexts/SnackbarContext';
 
 interface ChatSidebarProps {
   onSelectChat: (chatId: string) => void;
@@ -39,6 +40,7 @@ export const ChatSidebar: React.FC<ChatSidebarProps> = ({ onSelectChat }) => {
   const { chats, currentChat } = useChatStore();
   const { user } = useAuthStore();
   const signOut = useSignOut();
+  const { showConfirm } = useSnackbar();
   
   const { data: historyData, isLoading } = useGetHistory();
   const createChat = useCreateChat();
@@ -56,9 +58,10 @@ export const ChatSidebar: React.FC<ChatSidebarProps> = ({ onSelectChat }) => {
 
   const handleDeleteChat = (chatId: string, e: React.MouseEvent) => {
     e.stopPropagation();
-    if (confirm('Are you sure you want to delete this chat?')) {
-      deleteChat.mutate(chatId);
-    }
+    showConfirm(
+      '¿Estás seguro de que quieres eliminar este chat?',
+      () => deleteChat.mutate(chatId)
+    );
   };
 
   const handlePinToggle = (chatId: string, isPinned: boolean, e: React.MouseEvent) => {
