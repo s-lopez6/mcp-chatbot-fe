@@ -2,12 +2,13 @@ import { useQuery } from "@tanstack/react-query";
 import { historyApi } from "../../services/api";
 import { useChatStore } from "../../store/chatStore";
 import type { Chat, ChatMessage } from "../../types/api";
+import { QUERY_KEYS } from "../queryKeys";
 
 export const useGetChat = (chatId: string) => {
   const { setCurrentChat } = useChatStore();
 
   return useQuery({
-    queryKey: ["chat", chatId],
+    queryKey: [QUERY_KEYS.CHAT, chatId],
     queryFn: async () => {
       if (!chatId) {
         setCurrentChat(null);

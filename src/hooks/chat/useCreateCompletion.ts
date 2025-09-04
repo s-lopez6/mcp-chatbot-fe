@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useChatStore } from "../../store/chatStore";
 import { chatApi } from "../../services/api";
 import type { ChatMessage, CreateCompletionDto } from "../../types/api";
+import { QUERY_KEYS } from "../queryKeys";
 
 export const useCreateCompletion = () => {
   const { addMessage } = useChatStore();
@@ -32,7 +33,7 @@ export const useCreateCompletion = () => {
         timestamp: response.data.createdAt,
       };
       addMessage(chatId, assistantMessage);
-      queryClient.invalidateQueries({ queryKey: ["chat", chatId] });
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.CHAT, chatId] });
     },
   });
 };
