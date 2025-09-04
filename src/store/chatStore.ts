@@ -29,7 +29,7 @@ export const useChatStore = create<ChatStore>()(
 
     setChats: (chats: Chat[]) => {
       set((state) => {
-        state.chats = chats;
+        state.chats.push(...chats);
       });
     },
 

@@ -79,7 +79,7 @@ export const historyApi = {
   getHistory: (params?: {
     limit?: number;
     offset?: number;
-  }): Promise<AxiosResponse<FindAllResponseDto[]>> =>
+  }): Promise<AxiosResponse<FindAllResponseDto>> =>
     api.get(API_ENDPOINTS.GET_HISTORY, { params }),
 
   getChat: (chatId: string): Promise<AxiosResponse<FindOneResponseDto>> =>

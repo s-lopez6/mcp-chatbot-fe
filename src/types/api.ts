@@ -86,11 +86,23 @@ export interface CheckStatusResponseDto {
 }
 
 export interface FindAllResponseDto {
+  meta: Meta;
+  data: FindAllDataResponseDto[];
+}
+
+export interface FindAllDataResponseDto {
   id: string;
-  pinDate: string;
+  pinDate: null;
   firstPrompt: string;
   lastMessageAt: string;
   title: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Meta {
+  hasNextPage: boolean;
+  hasPreviousPage: boolean;
 }
 
 export interface ChatMessageDto {
@@ -129,7 +141,7 @@ export interface AuthState {
 export interface ChatMessage {
   id: string;
   content: string;
-  role: 'user' | 'assistant';
+  role: "user" | "assistant";
   timestamp: string;
   feedback?: boolean;
 }
@@ -140,6 +152,7 @@ export interface Chat {
   messages: ChatMessage[];
   createdAt: string;
   updatedAt: string;
+  lastMessageAt: string;
   isPinned: boolean;
 }
 

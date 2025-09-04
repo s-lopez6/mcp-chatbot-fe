@@ -27,6 +27,7 @@ interface Props {
 export const ChatListItem = ({ chat }: Props) => {
   const navigate = useNavigate();
   const { showConfirm } = useSnackbar();
+
   const { chatId } = useParams<{ chatId?: string }>();
   const pinChat = usePinChat();
   const unpinChat = useUnpinChat();
