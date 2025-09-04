@@ -117,6 +117,11 @@ export const useGetChat = (chatId: string) => {
   return useQuery({
     queryKey: ["chat", chatId],
     queryFn: async () => {
+      if (!chatId) {
+        setCurrentChat(null);
+        return null;
+      }
+      
       const response = await historyApi.getChat(chatId);
       const chatData = response.data;
       const messages: ChatMessage[] = [];
@@ -153,6 +158,8 @@ export const useGetChat = (chatId: string) => {
       return response;
     },
     enabled: !!chatId,
+    staleTime: 0, // Always refetch when switching chats
+    refetchOnMount: 'always', // Always refetch when component mounts
   });
 };
 
