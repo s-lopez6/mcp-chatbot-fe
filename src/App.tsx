@@ -1,35 +1,56 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useState } from 'react';
+import { Box, CircularProgress, Typography } from '@mui/material';
+import { useAuthStore } from './store/authStore';
+import { useCheckStatus } from './hooks/useAuth';
+import { useGetChat } from './hooks/useChat';
+import { LoginForm } from './components/auth/LoginForm';
+import { ChatSidebar } from './components/chat/ChatSidebar';
+import { ChatInterface } from './components/chat/ChatInterface';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const { isAuthenticated, isLoading: authLoading } = useAuthStore();
+  const [selectedChatId, setSelectedChatId] = useState<string>('');
+  
+  // Check authentication status on app load
+  useCheckStatus();
+  
+  // Load selected chat
+  useGetChat(selectedChatId);
+
+  const handleSelectChat = (chatId: string) => {
+    setSelectedChatId(chatId);
+  };
+
+  if (authLoading) {
+    return (
+      <Box
+        sx={{
+          minHeight: '100vh',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          flexDirection: 'column',
+          gap: 2,
+        }}
+      >
+        <CircularProgress size={40} />
+        <Typography variant="body1" color="text.secondary">
+          Loading...
+        </Typography>
+      </Box>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return <LoginForm />;
+  }
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <Box sx={{ display: 'flex', height: '100vh' }}>
+      <ChatSidebar onSelectChat={handleSelectChat} />
+      <ChatInterface />
+    </Box>
+  );
 }
 
-export default App
+export default App;
