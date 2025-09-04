@@ -15,7 +15,7 @@ import { env } from "../../config/env";
 import { useCreateChat } from "../../hooks/chat/useCreateChat";
 import { useCreateCompletion } from "../../hooks/chat/useCreateCompletion";
 
-export const ChatInterface: React.FC = () => {
+export const ChatInterface = () => {
   const { chatId } = useParams<{ chatId?: string }>();
   const navigate = useNavigate();
   const { currentChat } = useChatStore();

@@ -11,7 +11,9 @@ export const useGetHistory = (params?: { limit?: number; offset?: number }) => {
   return useQuery({
     queryKey: [QUERY_KEYS.CHATS, params],
     queryFn: async () => {
-      const response = await historyApi.getHistory(params);
+      const response = await historyApi.getHistory({
+        limit: 13,
+      });
       const chats: Chat[] = response.data.map((item) =>
         GetHistoryMapper.responseToChat(item)
       );

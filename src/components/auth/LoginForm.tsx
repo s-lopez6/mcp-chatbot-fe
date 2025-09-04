@@ -14,7 +14,7 @@ import { ChatBubbleOutline } from "@mui/icons-material";
 import { env } from "../../config/env";
 import { useSignIn } from "../../hooks/auth/useSignIn";
 
-export const LoginForm: React.FC = () => {
+export const LoginForm = () => {
   const [email, setEmail] = useState("santi@gmail.com");
   const [password, setPassword] = useState("Password1234");
   const [errors, setErrors] = useState<{ email?: string; password?: string }>(

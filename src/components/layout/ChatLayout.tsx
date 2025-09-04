@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Box } from "@mui/material";
 import { ChatSidebar } from "../chat/ChatSidebar";
@@ -6,7 +6,7 @@ import { ChatInterface } from "../chat/ChatInterface";
 import { useChatStore } from "../../store/chatStore";
 import { useGetChat } from "../../hooks/history/useGetChat";
 
-export const ChatLayout: React.FC = () => {
+export const ChatLayout = () => {
   const { chatId } = useParams<{ chatId?: string }>();
   const { setCurrentChat } = useChatStore();
 
