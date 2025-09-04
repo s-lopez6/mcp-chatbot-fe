@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Box,
   Card,
@@ -9,40 +9,42 @@ import {
   Alert,
   CircularProgress,
   Avatar,
-} from '@mui/material';
-import { ChatBubbleOutline } from '@mui/icons-material';
-import { useSignIn } from '../../hooks/useAuth';
-import { env } from '../../config/env';
+} from "@mui/material";
+import { ChatBubbleOutline } from "@mui/icons-material";
+import { useSignIn } from "../../hooks/useAuth";
+import { env } from "../../config/env";
 
 export const LoginForm: React.FC = () => {
-  const [email, setEmail] = useState('santiaguin55.sl@gmail.com');
-  const [password, setPassword] = useState('Password123');
-  const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
-  
+  const [email, setEmail] = useState("santi@gmail.com");
+  const [password, setPassword] = useState("Password1234");
+  const [errors, setErrors] = useState<{ email?: string; password?: string }>(
+    {}
+  );
+
   const signIn = useSignIn();
 
   const validateForm = () => {
     const newErrors: { email?: string; password?: string } = {};
-    
+
     if (!email) {
-      newErrors.email = 'Email is required';
+      newErrors.email = "Email is required";
     } else if (!/\S+@\S+\.\S+/.test(email)) {
-      newErrors.email = 'Email is invalid';
+      newErrors.email = "Email is invalid";
     }
-    
+
     if (!password) {
-      newErrors.password = 'Password is required';
+      newErrors.password = "Password is required";
     } else if (password.length < 8) {
-      newErrors.password = 'Password must be at least 8 characters';
+      newErrors.password = "Password must be at least 8 characters";
     }
-    
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (validateForm()) {
       signIn.mutate({ email, password });
     }
@@ -51,28 +53,39 @@ export const LoginForm: React.FC = () => {
   return (
     <Box
       sx={{
-        minHeight: '100vh',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        bgcolor: 'background.default',
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        bgcolor: "background.default",
         p: 2,
       }}
     >
-      <Card sx={{ maxWidth: 400, width: '100%' }}>
+      <Card sx={{ maxWidth: 400, width: "100%" }}>
         <CardContent sx={{ p: 4 }}>
-          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mb: 3 }}>
-            <Avatar sx={{ bgcolor: 'primary.main', mb: 2 }}>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              mb: 3,
+            }}
+          >
+            <Avatar sx={{ bgcolor: "primary.main", mb: 2 }}>
               <ChatBubbleOutline />
             </Avatar>
             <Typography variant="h4" component="h1" gutterBottom>
               Sign in to {env.APP_NAME}
             </Typography>
-            <Typography variant="body2" color="text.secondary" textAlign="center">
+            <Typography
+              variant="body2"
+              color="text.secondary"
+              textAlign="center"
+            >
               Enter your credentials to access the chatbot
             </Typography>
           </Box>
-          
+
           <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2 }}>
             <TextField
               fullWidth
@@ -88,7 +101,7 @@ export const LoginForm: React.FC = () => {
               margin="normal"
               required
             />
-            
+
             <TextField
               fullWidth
               id="password"
@@ -116,9 +129,11 @@ export const LoginForm: React.FC = () => {
               variant="contained"
               disabled={signIn.isPending}
               sx={{ mt: 3, mb: 2, py: 1.5 }}
-              startIcon={signIn.isPending ? <CircularProgress size={20} /> : null}
+              startIcon={
+                signIn.isPending ? <CircularProgress size={20} /> : null
+              }
             >
-              {signIn.isPending ? 'Signing in...' : 'Sign in'}
+              {signIn.isPending ? "Signing in..." : "Sign in"}
             </Button>
           </Box>
         </CardContent>
