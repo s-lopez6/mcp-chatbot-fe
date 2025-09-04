@@ -1,25 +1,16 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { Box, CircularProgress, Typography } from '@mui/material';
 import { useAuthStore } from './store/authStore';
 import { useCheckStatus } from './hooks/useAuth';
-import { useGetChat } from './hooks/useChat';
 import { LoginForm } from './components/auth/LoginForm';
-import { ChatSidebar } from './components/chat/ChatSidebar';
-import { ChatInterface } from './components/chat/ChatInterface';
+import { ChatLayout } from './components/layout/ChatLayout';
 
 function App() {
   const { isAuthenticated, isLoading: authLoading } = useAuthStore();
-  const [selectedChatId, setSelectedChatId] = useState<string>('');
   
   // Check authentication status on app load
   useCheckStatus();
-  
-  // Load selected chat
-  useGetChat(selectedChatId);
-
-  const handleSelectChat = (chatId: string) => {
-    setSelectedChatId(chatId);
-  };
 
   if (authLoading) {
     return (
@@ -46,10 +37,11 @@ function App() {
   }
 
   return (
-    <Box sx={{ display: 'flex', height: '100vh' }}>
-      <ChatSidebar onSelectChat={handleSelectChat} />
-      <ChatInterface />
-    </Box>
+    <Routes>
+      <Route path="/" element={<Navigate to="/chat" replace />} />
+      <Route path="/chat" element={<ChatLayout />} />
+      <Route path="/chat/:chatId" element={<ChatLayout />} />
+    </Routes>
   );
 }
 

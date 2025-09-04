@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import {
   Box,
   Typography,
@@ -14,6 +15,8 @@ import { useCreateCompletion, useCreateChat } from '../../hooks/useChat';
 import { env } from '../../config/env';
 
 export const ChatInterface: React.FC = () => {
+  const { chatId } = useParams<{ chatId?: string }>();
+  const navigate = useNavigate();
   const { currentChat } = useChatStore();
   const messagesEndRef = useRef<HTMLDivElement>(null);
   
@@ -29,26 +32,33 @@ export const ChatInterface: React.FC = () => {
   }, [currentChat?.messages]);
 
   const handleSendMessage = async (message: string) => {
-    if (!currentChat) {
+    if (!chatId || !currentChat) {
       // Create a new chat first
-      const newChatResponse = await createChat.mutateAsync();
-      const chatId = newChatResponse.data.chatId;
-      
-      // Send the message to the new chat
-      createCompletion.mutate({
-        chatId,
-        data: { message },
-      });
+      try {
+        const newChatResponse = await createChat.mutateAsync();
+        const newChatId = newChatResponse.data.chatId;
+        
+        // Navigate to the new chat
+        navigate(`/chat/${newChatId}`);
+        
+        // Send the message to the new chat
+        createCompletion.mutate({
+          chatId: newChatId,
+          data: { message },
+        });
+      } catch (error) {
+        console.error('Error creating chat:', error);
+      }
     } else {
       // Send message to existing chat
       createCompletion.mutate({
-        chatId: currentChat.id,
+        chatId: chatId,
         data: { message },
       });
     }
   };
 
-  if (!currentChat) {
+  if (!chatId) {
     return (
       <Box
         sx={{
@@ -115,10 +125,10 @@ export const ChatInterface: React.FC = () => {
         }}
       >
         <Typography variant="h6" component="h1" noWrap>
-          {currentChat.title}
+          {currentChat?.title || 'Loading...'}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          {currentChat.messages.length} messages
+          {currentChat?.messages.length || 0} messages
         </Typography>
       </Paper>
 
@@ -131,7 +141,18 @@ export const ChatInterface: React.FC = () => {
           bgcolor: 'background.default',
         }}
       >
-        {currentChat.messages.length === 0 ? (
+        {!currentChat ? (
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              height: '100%',
+            }}
+          >
+            <CircularProgress />
+          </Box>
+        ) : currentChat.messages.length === 0 ? (
           <Box
             sx={{
               display: 'flex',

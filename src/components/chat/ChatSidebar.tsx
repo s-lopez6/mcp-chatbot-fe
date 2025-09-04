@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   Box,
   Drawer,
@@ -36,13 +37,11 @@ import {
 import { useSignOut } from "../../hooks/useAuth";
 import { useSnackbar } from "../../contexts/SnackbarContext";
 
-interface ChatSidebarProps {
-  onSelectChat: (chatId: string) => void;
-}
-
 const SIDEBAR_WIDTH = 320;
 
-export const ChatSidebar: React.FC<ChatSidebarProps> = ({ onSelectChat }) => {
+export const ChatSidebar: React.FC = () => {
+  const navigate = useNavigate();
+  const { chatId } = useParams<{ chatId?: string }>();
   const { chats, currentChat } = useChatStore();
   const { user } = useAuthStore();
   const signOut = useSignOut();
@@ -54,12 +53,17 @@ export const ChatSidebar: React.FC<ChatSidebarProps> = ({ onSelectChat }) => {
   const pinChat = usePinChat();
   const unpinChat = useUnpinChat();
 
-  const handleChatSelect = (chatId: string) => {
-    onSelectChat(chatId);
+  const handleChatSelect = (selectedChatId: string) => {
+    navigate(`/chat/${selectedChatId}`);
   };
 
-  const handleNewChat = () => {
-    createChat.mutate();
+  const handleNewChat = async () => {
+    try {
+      const response = await createChat.mutateAsync();
+      navigate(`/chat/${response.data.chatId}`);
+    } catch (error) {
+      console.error('Error creating chat:', error);
+    }
   };
 
   const handleDeleteChat = (chatId: string, e: React.MouseEvent) => {
@@ -89,7 +93,7 @@ export const ChatSidebar: React.FC<ChatSidebarProps> = ({ onSelectChat }) => {
     <ListItem disablePadding sx={{ mb: 0.5 }}>
       <ListItemButton
         onClick={() => handleChatSelect(chat.id)}
-        selected={currentChat?.id === chat.id}
+        selected={chatId === chat.id}
         sx={{
           borderRadius: 2,
           mx: 1,
