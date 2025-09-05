@@ -32,55 +32,13 @@ export class ChatMessageMapper {
 }
 
 export class ChatNewMapper {
-  static responseToChat(
-    id: string,
-    message: string,
-    response: CreateCompletionResponseDto
-  ): Chat {
+  static responseToChat(id: string): Chat {
     const now = new Date().toISOString();
-
-    const userMessage: ChatMessage = {
-      id: uuidv4(),
-      content: message,
-      role: "user",
-      timestamp: now,
-    };
-
-    const assistantMessage: ChatMessage = {
-      id: response.messageId,
-      content: response.content,
-      role: "assistant",
-      timestamp: now,
-    };
-
-    return {
-      id,
-      title: message,
-      messages: [userMessage, assistantMessage],
-      lastMessageAt: now,
-      createdAt: now,
-      updatedAt: now,
-      isPinned: false,
-    } as Chat;
-  }
-
-  static responseToChat2(id: string): Chat {
-    const now = new Date().toISOString();
-
-    // const userMessage: ChatMessage = ChatMessageMapper.toUserMesage(message);
-
-    // const assistantMessage: ChatMessage = {
-    //   id: response.messageId,
-    //   content: response.content,
-    //   role: "assistant",
-    //   timestamp: now,
-    // };
 
     return {
       id,
       title: "",
       messages: [],
-      // messages: [userMessage],
       lastMessageAt: now,
       createdAt: now,
       updatedAt: now,
