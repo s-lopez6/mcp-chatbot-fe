@@ -6,7 +6,7 @@ import type {
   Chat,
 } from "../../types/api";
 import { QUERY_KEYS } from "../queryKeys";
-import { ChatMessageMapper } from "../../components/chat/mapper/chat-new.mapper";
+import { ChatMessageMapper } from "./mapper/chat-new.mapper";
 import { produce } from "immer";
 
 export const useCreateCompletionPrompt = () => {
