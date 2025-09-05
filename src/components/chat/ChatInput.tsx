@@ -82,11 +82,9 @@ export const ChatInput: React.FC<ChatInputProps> = ({
 
   return (
     <Paper
-      elevation={2}
+      elevation={0}
       sx={{
         p: 2,
-        // borderTop: 1,
-        borderColor: "divider",
         bgcolor: "background.default",
       }}
     >

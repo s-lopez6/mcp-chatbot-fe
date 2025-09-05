@@ -23,7 +23,7 @@ export const ChatSidebarHeader = () => {
   };
 
   return (
-    <Paper elevation={0} sx={{ p: 2, bgcolor: "background.paper" }}>
+    <Paper elevation={0} sx={{ p: 2, bgcolor: "background.default" }}>
       <Box
         sx={{
           display: "flex",

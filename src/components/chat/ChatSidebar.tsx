@@ -1,4 +1,4 @@
-import { Box, Drawer, Divider } from "@mui/material";
+import { Box, Drawer } from "@mui/material";
 
 import { ChatSidebarHeader } from "./ChatSidebarHeader";
 import { ChatSidebarList } from "./ChatSidebarList";
@@ -23,7 +23,6 @@ export const ChatSidebar = () => {
     >
       <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
         <ChatSidebarHeader />
-        <Divider />
         <ChatSidebarList />
       </Box>
     </Drawer>

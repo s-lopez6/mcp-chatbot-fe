@@ -11,7 +11,7 @@ export const ChatWelcomeMessage = () => {
         flex: 1,
         display: "flex",
         flexDirection: "column",
-        bgcolor: "background.paper",
+        bgcolor: "background.default",
       }}
     >
       <Box
