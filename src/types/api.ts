@@ -155,9 +155,3 @@ export interface Chat {
   lastMessageAt: string;
   isPinned: boolean;
 }
-
-export interface ChatState {
-  chats: Chat[];
-  currentChat: Chat | null;
-  isLoading: boolean;
-}

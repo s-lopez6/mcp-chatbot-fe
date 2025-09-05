@@ -50,11 +50,15 @@ export const ChatListItem = ({ chat }: Props) => {
     }
   };
 
-  const handleDeleteChat = (chatId: string, e: React.MouseEvent) => {
+  const handleDeleteChat = (chatIdToDelete: string, e: React.MouseEvent) => {
     e.stopPropagation();
-    showConfirm("¿Estás seguro de que quieres eliminar este chat?", () =>
-      deleteChat.mutate(chatId)
-    );
+    showConfirm("¿Estás seguro de que quieres eliminar este chat?", () => {
+      deleteChat.mutate(chatIdToDelete);
+
+      if (chatIdToDelete === chatId) {
+        navigate(`/chat`);
+      }
+    });
   };
 
   return (

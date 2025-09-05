@@ -1,5 +1,5 @@
-import React, { useEffect, useRef } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useEffect, useRef } from "react";
+import { useParams } from "react-router-dom";
 import {
   Box,
   Typography,
@@ -10,17 +10,15 @@ import {
 import { ChatBubbleOutline } from "@mui/icons-material";
 import { ChatMessage } from "./ChatMessage";
 import { ChatInput } from "./ChatInput";
-import { useChatStore } from "../../store/chatStore";
 import { env } from "../../config/env";
 import { useCreateChat } from "../../hooks/chat/useCreateChat";
 import { useCreateCompletion } from "../../hooks/chat/useCreateCompletion";
+import { useGetChat } from "../../hooks/history/useGetChat";
 
-export const ChatInterface = () => {
+export const Chat = () => {
   const { chatId } = useParams<{ chatId?: string }>();
-  const navigate = useNavigate();
-  const { currentChat } = useChatStore();
+  const { data: currentChat } = useGetChat(chatId || "");
   const messagesEndRef = useRef<HTMLDivElement>(null);
-
   const createCompletion = useCreateCompletion();
   const createChat = useCreateChat();
 
@@ -31,33 +29,6 @@ export const ChatInterface = () => {
   useEffect(() => {
     scrollToBottom();
   }, [currentChat?.messages]);
-
-  const handleSendMessage = async (message: string) => {
-    if (!chatId || !currentChat) {
-      // Create a new chat first
-      try {
-        const newChatResponse = await createChat.mutateAsync();
-        const newChatId = newChatResponse.data.chatId;
-
-        // Navigate to the new chat
-        navigate(`/chat/${newChatId}`);
-
-        // Send the message to the new chat
-        createCompletion.mutate({
-          chatId: newChatId,
-          data: { message },
-        });
-      } catch (error) {
-        console.error("Error creating chat:", error);
-      }
-    } else {
-      // Send message to existing chat
-      createCompletion.mutate({
-        chatId: chatId,
-        data: { message },
-      });
-    }
-  };
 
   if (!chatId) {
     return (
@@ -109,7 +80,6 @@ export const ChatInterface = () => {
         </Box>
 
         <ChatInput
-          onSendMessage={handleSendMessage}
           disabled={createCompletion.isPending || createChat.isPending}
           placeholder="Start a new conversation..."
         />
@@ -137,7 +107,7 @@ export const ChatInterface = () => {
         }}
       >
         <Typography variant="h6" component="h1" noWrap>
-          {currentChat?.title || "Loading..."}
+          {currentChat?.title || ""}
         </Typography>
         <Typography variant="body2" color="text.secondary">
           {currentChat?.messages.length || 0} messages
@@ -234,10 +204,7 @@ export const ChatInterface = () => {
       </Box>
 
       {/* Chat Input */}
-      <ChatInput
-        onSendMessage={handleSendMessage}
-        disabled={createCompletion.isPending}
-      />
+      <ChatInput disabled={createCompletion.isPending} />
     </Box>
   );
 };

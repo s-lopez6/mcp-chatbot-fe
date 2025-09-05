@@ -1,9 +1,9 @@
 import { useMemo } from "react";
 import type { Chat } from "../../types/api";
-import { useChatStore } from "../../store/chatStore";
+import { useGetHistory } from "./useGetHistory";
 
 export const usePinnedChats = () => {
-  const { chats } = useChatStore();
+  const { data: chats } = useGetHistory();
 
   const { pinnedChats, unpinnedChats } = useMemo(() => {
     const pinnedChats: Chat[] = [];

@@ -1,17 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
 import { historyApi } from "../../services/api";
-import { useChatStore } from "../../store/chatStore";
 import type { Chat, ChatMessage } from "../../types/api";
 import { QUERY_KEYS } from "../queryKeys";
 
 export const useGetChat = (chatId: string) => {
-  const { setCurrentChat } = useChatStore();
-
-  return useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: [QUERY_KEYS.CHAT, chatId],
     queryFn: async () => {
       if (!chatId) {
-        setCurrentChat(null);
         return null;
       }
 
@@ -43,15 +39,21 @@ export const useGetChat = (chatId: string) => {
         id: chatData.id,
         title: chatData.title,
         messages,
+        lastMessageAt: chatData.lastMessageAt,
         createdAt: chatData.createdAt,
         updatedAt: chatData.updatedAt,
         isPinned: !!chatData.pinDate,
       };
-      setCurrentChat(chat);
-      return response;
+
+      return chat;
     },
-    enabled: !!chatId,
-    staleTime: 0, // Always refetch when switching chats
-    refetchOnMount: "always", // Always refetch when component mounts
+    // enabled: !!chatId,
+    // staleTime: 0, // Always refetch when switching chats
+    // refetchOnMount: "always", // Always refetch when component mounts
   });
+
+  return {
+    data,
+    isLoading,
+  };
 };

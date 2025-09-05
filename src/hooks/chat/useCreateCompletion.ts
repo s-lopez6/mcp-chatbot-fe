@@ -1,39 +1,64 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useChatStore } from "../../store/chatStore";
 import { chatApi } from "../../services/api";
-import type { ChatMessage, CreateCompletionDto } from "../../types/api";
+import type { Chat, ChatMessage, CreateCompletionDto } from "../../types/api";
 import { QUERY_KEYS } from "../queryKeys";
+import { ChatMessageMapper } from "../../components/chat/mapper/chat-new.mapper";
+import { produce } from "immer";
 
 export const useCreateCompletion = () => {
-  const { addMessage } = useChatStore();
   const queryClient = useQueryClient();
 
-  return useMutation({
-    mutationFn: ({
+  const { data, isPending, mutateAsync } = useMutation({
+    mutationFn: async ({
       chatId,
       data,
     }: {
       chatId: string;
       data: CreateCompletionDto;
-    }) => chatApi.createCompletion(chatId, data),
-    onMutate: ({ chatId, data }) => {
-      const userMessage: ChatMessage = {
-        id: `temp-${Date.now()}`,
-        content: data.message,
-        role: "user",
-        timestamp: new Date().toISOString(),
-      };
-      addMessage(chatId, userMessage);
+    }) => {
+      const res = await chatApi.createCompletion(chatId, data);
+      return res.data;
     },
-    onSuccess: (response, { chatId }) => {
-      const assistantMessage: ChatMessage = {
-        id: response.data.messageId,
-        content: response.data.content,
-        role: "assistant",
-        timestamp: response.data.createdAt,
-      };
-      addMessage(chatId, assistantMessage);
-      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.CHAT, chatId] });
+    onMutate: ({ chatId, data }) => {
+      const key = [QUERY_KEYS.CHAT, chatId];
+      const existingChat = queryClient.getQueryData<Chat>(key);
+
+      if (!existingChat) {
+        return;
+      }
+
+      queryClient.setQueryData(key, (oldData: Chat) => {
+        const newUserMessage = ChatMessageMapper.toUserMesage(data.message);
+
+        return produce(oldData, (draft) => {
+          draft.messages.push(newUserMessage);
+        });
+      });
+    },
+    onSuccess: (response, { chatId, data }) => {
+      const key = [QUERY_KEYS.CHAT, chatId];
+      const existingChat = queryClient.getQueryData<Chat>(key);
+
+      if (!existingChat) {
+        return;
+      }
+
+      queryClient.setQueryData(key, (oldData: Chat) => {
+        const assistantMessage: ChatMessage =
+          ChatMessageMapper.toAssistantMesage(response);
+
+        return produce(oldData, (draft) => {
+          draft.messages.push(assistantMessage);
+        });
+      });
+
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.CHATS] });
     },
   });
+
+  return {
+    data,
+    isPending,
+    mutateAsync,
+  };
 };

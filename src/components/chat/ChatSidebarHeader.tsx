@@ -19,12 +19,7 @@ export const ChatSidebarHeader = () => {
   const createChat = useCreateChat();
 
   const handleNewChat = async () => {
-    try {
-      const response = await createChat.mutateAsync();
-      navigate(`/chat/${response.data.chatId}`);
-    } catch (error) {
-      console.error("Error creating chat:", error);
-    }
+    navigate("/chat");
   };
 
   return (
