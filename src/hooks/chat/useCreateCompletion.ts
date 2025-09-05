@@ -5,7 +5,7 @@ import { QUERY_KEYS } from "../queryKeys";
 import { ChatMessageMapper } from "./mapper/chat-message.mapper";
 import { produce } from "immer";
 
-export const useCreateCompletion = () => {
+export const useCreateCompletion = (onMutate?: (chatId: string) => void) => {
   const queryClient = useQueryClient();
 
   const { data, isPending, mutateAsync } = useMutation({
@@ -36,6 +36,8 @@ export const useCreateCompletion = () => {
           draft.messages.push(assistantThinkingMessage);
         });
       });
+
+      onMutate?.(chatId);
     },
     onSuccess: (response, { chatId, data }, context) => {
       const key = [QUERY_KEYS.CHAT, chatId];

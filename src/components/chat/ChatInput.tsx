@@ -18,7 +18,11 @@ export const ChatInput: React.FC<ChatInputProps> = ({
 
   const [message, setMessage] = useState("");
 
-  const createCompletion = useCreateCompletion();
+  const handleMutate = (chatId: string) => {
+    navigate(`/chat/${chatId}`);
+  };
+
+  const createCompletion = useCreateCompletion(handleMutate);
   const createChat = useCreateChat();
   const navigate = useNavigate();
 
@@ -32,9 +36,6 @@ export const ChatInput: React.FC<ChatInputProps> = ({
           chatId: newChatId,
           data: { message },
         });
-
-        // todo -> improve by navigating when mutating
-        navigate(`/chat/${newChatId}`);
       } catch (error) {
         console.error("Error creating chat:", error);
       }
