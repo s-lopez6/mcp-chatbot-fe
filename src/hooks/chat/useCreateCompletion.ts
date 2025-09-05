@@ -27,15 +27,17 @@ export const useCreateCompletion = () => {
         return;
       }
 
-      queryClient.setQueryData(key, (oldData: Chat) => {
-        const newUserMessage = ChatMessageMapper.toUserMesage(data.message);
+      const newUserMessage = ChatMessageMapper.toUserMesage(data.message);
+      const assistantThinkingMessage = ChatMessageMapper.getThinkingMesage();
 
+      queryClient.setQueryData(key, (oldData: Chat) => {
         return produce(oldData, (draft) => {
           draft.messages.push(newUserMessage);
+          draft.messages.push(assistantThinkingMessage);
         });
       });
     },
-    onSuccess: (response, { chatId, data }) => {
+    onSuccess: (response, { chatId, data }, context) => {
       const key = [QUERY_KEYS.CHAT, chatId];
       const existingChat = queryClient.getQueryData<Chat>(key);
 
@@ -48,6 +50,7 @@ export const useCreateCompletion = () => {
           ChatMessageMapper.toAssistantMesage(response);
 
         return produce(oldData, (draft) => {
+          draft.messages.pop();
           draft.messages.push(assistantMessage);
         });
       });

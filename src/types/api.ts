@@ -144,6 +144,7 @@ export interface ChatMessage {
   role: "user" | "assistant";
   timestamp: string;
   feedback?: boolean;
+  type?: "standard" | "thinking";
 }
 
 export interface Chat {

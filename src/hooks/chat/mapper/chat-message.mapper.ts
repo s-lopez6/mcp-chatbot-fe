@@ -28,4 +28,18 @@ export class ChatMessageMapper {
 
     return userMessage;
   }
+
+  static getThinkingMesage(): ChatMessage {
+    const now = new Date().toISOString();
+
+    const userMessage: ChatMessage = {
+      id: uuidv4(),
+      content: "",
+      role: "assistant",
+      timestamp: now,
+      type: "thinking",
+    };
+
+    return userMessage;
+  }
 }
