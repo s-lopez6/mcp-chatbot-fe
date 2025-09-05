@@ -10,10 +10,11 @@ import {
 import { ChatBubbleOutline } from "@mui/icons-material";
 import { ChatMessage } from "./ChatMessage";
 import { ChatInput } from "./ChatInput";
-import { env } from "../../config/env";
 import { useCreateCompletion } from "../../hooks/chat/useCreateCompletion";
 import { useGetChat } from "../../hooks/history/useGetChat";
 import { useSnackbar } from "../../contexts/SnackbarContext";
+import { ChatWelcomeMessage } from "./ChatWelcomeMessage";
+import { ChatHeader } from "./ChatHeader";
 
 export const Chat = () => {
   const { chatId } = useParams<{ chatId?: string }>();
@@ -40,57 +41,7 @@ export const Chat = () => {
   }, [currentChat?.messages]);
 
   if (!chatId) {
-    return (
-      <Box
-        sx={{
-          flex: 1,
-          display: "flex",
-          flexDirection: "column",
-          bgcolor: "background.paper",
-        }}
-      >
-        <Box
-          sx={{
-            flex: 1,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            p: 4,
-          }}
-        >
-          <Avatar
-            sx={{
-              width: 64,
-              height: 64,
-              bgcolor: "primary.main",
-              mb: 3,
-            }}
-          >
-            <ChatBubbleOutline sx={{ fontSize: 32 }} />
-          </Avatar>
-          <Typography
-            variant="h4"
-            component="h2"
-            gutterBottom
-            color="text.primary"
-          >
-            Welcome to {env.APP_NAME}
-          </Typography>
-          <Typography
-            variant="body1"
-            color="text.secondary"
-            textAlign="center"
-            sx={{ maxWidth: 500, mb: 4 }}
-          >
-            Start a conversation by typing a message below or select an existing
-            chat from the sidebar.
-          </Typography>
-        </Box>
-
-        <ChatInput placeholder="Start a new conversation..." />
-      </Box>
-    );
+    return <ChatWelcomeMessage />;
   }
 
   if (!currentChat) {
@@ -101,30 +52,11 @@ export const Chat = () => {
           display: "flex",
           flexDirection: "column",
           bgcolor: "background.paper",
+          justifyContent: "center",
+          alignItems: "center",
         }}
       >
-        {/* Messages */}
-        <Box
-          sx={{
-            flex: 1,
-            overflow: "auto",
-            p: 2,
-            bgcolor: "background.default",
-          }}
-        >
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              height: "100%",
-            }}
-          >
-            <Typography variant="body1" color="text.secondary">
-              Upps! Chat not found
-            </Typography>
-          </Box>
-        </Box>
+        <CircularProgress size={80} />
       </Box>
     );
   }
@@ -139,22 +71,7 @@ export const Chat = () => {
       }}
     >
       {/* Chat Header */}
-      <Paper
-        elevation={0}
-        sx={{
-          p: 2,
-          borderBottom: 1,
-          borderColor: "divider",
-          bgcolor: "background.paper",
-        }}
-      >
-        <Typography variant="h6" component="h1" noWrap>
-          {currentChat?.title || ""}
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          {currentChat?.messages.length || 0} messages
-        </Typography>
-      </Paper>
+      <ChatHeader />
 
       {/* Messages */}
       <Box
