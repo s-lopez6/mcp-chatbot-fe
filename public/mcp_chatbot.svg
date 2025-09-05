@@ -1,0 +1,31 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Fondo redondeado -->
+  <rect x="10" y="10" width="180" height="180" rx="40" fill="url(#grad)"></rect>
+
+  <!-- Globo de chat -->
+  <path d="M60 70 
+           h80 
+           a20 20 0 0 1 20 20 
+           v30 
+           a20 20 0 0 1 -20 20 
+           h-50 
+           l-20 20 
+           v-20 
+           h-10 
+           a20 20 0 0 1 -20 -20 
+           v-30 
+           a20 20 0 0 1 20 -20z" fill="white"></path>
+
+  <!-- Tres puntitos del chat -->
+  <circle cx="85" cy="100" r="6" fill="#6C63FF"></circle>
+  <circle cx="100" cy="100" r="6" fill="#6C63FF"></circle>
+  <circle cx="115" cy="100" r="6" fill="#6C63FF"></circle>
+
+  <!-- Definición de gradiente -->
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6C63FF;stop-opacity:1"></stop>
+      <stop offset="100%" style="stop-color:#00C9A7;stop-opacity:1"></stop>
+    </linearGradient>
+  </defs>
+</svg>

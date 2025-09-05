@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   Box,
   Typography,
@@ -11,16 +11,25 @@ import { ChatBubbleOutline } from "@mui/icons-material";
 import { ChatMessage } from "./ChatMessage";
 import { ChatInput } from "./ChatInput";
 import { env } from "../../config/env";
-import { useCreateChat } from "../../hooks/chat/useCreateChat";
 import { useCreateCompletion } from "../../hooks/chat/useCreateCompletion";
 import { useGetChat } from "../../hooks/history/useGetChat";
+import { useSnackbar } from "../../contexts/SnackbarContext";
 
 export const Chat = () => {
   const { chatId } = useParams<{ chatId?: string }>();
-  const { data: currentChat } = useGetChat(chatId || "");
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const createCompletion = useCreateCompletion();
-  const createChat = useCreateChat();
+
+  const { showError } = useSnackbar();
+
+  const navigate = useNavigate();
+
+  const handleError = () => {
+    showError("Upss! Document not found");
+    navigate(`/chat`);
+  };
+
+  const { data: currentChat } = useGetChat(chatId || "", handleError);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -79,10 +88,43 @@ export const Chat = () => {
           </Typography>
         </Box>
 
-        <ChatInput
-          disabled={createCompletion.isPending || createChat.isPending}
-          placeholder="Start a new conversation..."
-        />
+        <ChatInput placeholder="Start a new conversation..." />
+      </Box>
+    );
+  }
+
+  if (!currentChat) {
+    return (
+      <Box
+        sx={{
+          flex: 1,
+          display: "flex",
+          flexDirection: "column",
+          bgcolor: "background.paper",
+        }}
+      >
+        {/* Messages */}
+        <Box
+          sx={{
+            flex: 1,
+            overflow: "auto",
+            p: 2,
+            bgcolor: "background.default",
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              height: "100%",
+            }}
+          >
+            <Typography variant="body1" color="text.secondary">
+              Upps! Chat not found
+            </Typography>
+          </Box>
+        </Box>
       </Box>
     );
   }
@@ -204,7 +246,7 @@ export const Chat = () => {
       </Box>
 
       {/* Chat Input */}
-      <ChatInput disabled={createCompletion.isPending} />
+      <ChatInput />
     </Box>
   );
 };

@@ -3,8 +3,16 @@ import { chatApi } from "../../services/api";
 import { QUERY_KEYS } from "../queryKeys";
 
 export const useListTools = () => {
-  return useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: [QUERY_KEYS.TOOLS],
-    queryFn: () => chatApi.listTools(),
+    queryFn: async () => {
+      const res = await chatApi.listTools();
+      return res.data;
+    },
   });
+
+  return {
+    data,
+    isLoading,
+  };
 };
