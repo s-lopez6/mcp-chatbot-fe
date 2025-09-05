@@ -85,9 +85,9 @@ export const ChatInput: React.FC<ChatInputProps> = ({
       elevation={2}
       sx={{
         p: 2,
-        borderTop: 1,
+        // borderTop: 1,
         borderColor: "divider",
-        bgcolor: "background.paper",
+        bgcolor: "background.default",
       }}
     >
       <Box
@@ -100,6 +100,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({
         }}
       >
         <TextField
+          color="primary"
           fullWidth
           inputRef={inputRef}
           multiline
@@ -113,6 +114,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({
           InputProps={{
             sx: {
               borderRadius: 3,
+              bgcolor: "background.paper",
             },
           }}
         />
