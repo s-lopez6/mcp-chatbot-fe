@@ -1,5 +1,4 @@
 import type {
-  Chat,
   ChatMessage,
   CreateCompletionResponseDto,
 } from "../../../types/api";
@@ -28,21 +27,5 @@ export class ChatMessageMapper {
     };
 
     return userMessage;
-  }
-}
-
-export class ChatNewMapper {
-  static responseToChat(id: string): Chat {
-    const now = new Date().toISOString();
-
-    return {
-      id,
-      title: "",
-      messages: [],
-      lastMessageAt: now,
-      createdAt: now,
-      updatedAt: now,
-      isPinned: false,
-    } as Chat;
   }
 }

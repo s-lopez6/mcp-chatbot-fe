@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { chatApi } from "../../services/api";
 import { QUERY_KEYS } from "../queryKeys";
-import { ChatNewMapper } from "./mapper/chat-new.mapper";
+import { ChatMapper } from "./mapper/chat.mapper";
 
 export const useCreateChat = () => {
   const queryClient = useQueryClient();
@@ -13,7 +13,7 @@ export const useCreateChat = () => {
     },
     onSuccess: (data) => {
       const key = [QUERY_KEYS.CHAT, data];
-      const newChat = ChatNewMapper.responseToChat(data);
+      const newChat = ChatMapper.responseToChat(data);
       queryClient.setQueryData(key, () => newChat);
     },
   });

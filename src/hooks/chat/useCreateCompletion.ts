@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { chatApi } from "../../services/api";
 import type { Chat, ChatMessage, CreateCompletionDto } from "../../types/api";
 import { QUERY_KEYS } from "../queryKeys";
-import { ChatMessageMapper } from "./mapper/chat-new.mapper";
+import { ChatMessageMapper } from "./mapper/chat-message.mapper";
 import { produce } from "immer";
 
 export const useCreateCompletion = () => {

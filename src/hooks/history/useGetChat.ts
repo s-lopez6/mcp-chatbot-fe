@@ -1,7 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { historyApi } from "../../services/api";
-import type { Chat, ChatMessage } from "../../types/api";
+import type { Chat } from "../../types/api";
 import { QUERY_KEYS } from "../queryKeys";
+import { GetChatMapper } from "./mappers/get-chat.mapper";
 
 export const useGetChat = (chatId: string) => {
   const { data, isLoading } = useQuery({
@@ -12,38 +13,7 @@ export const useGetChat = (chatId: string) => {
       }
 
       const response = await historyApi.getChat(chatId);
-      const chatData = response.data;
-      const messages: ChatMessage[] = [];
-
-      // For each message from the API, create both user and assistant messages
-      chatData.messages.forEach((msg) => {
-        // Add user message (prompt)
-        messages.push({
-          id: `${msg.messageId}-user`,
-          content: msg.prompt,
-          role: "user" as const,
-          timestamp: msg.createdAt,
-        });
-
-        // Add assistant message (response)
-        messages.push({
-          id: msg.messageId,
-          content: msg.response,
-          role: "assistant" as const,
-          timestamp: msg.createdAt,
-          feedback: msg.feedback,
-        });
-      });
-
-      const chat: Chat = {
-        id: chatData.id,
-        title: chatData.title,
-        messages,
-        lastMessageAt: chatData.lastMessageAt,
-        createdAt: chatData.createdAt,
-        updatedAt: chatData.updatedAt,
-        isPinned: !!chatData.pinDate,
-      };
+      const chat: Chat = GetChatMapper.responseToChat(response.data);
 
       return chat;
     },
