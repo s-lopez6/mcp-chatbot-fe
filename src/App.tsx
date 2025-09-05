@@ -1,5 +1,5 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-import { Box, CircularProgress, Typography } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 import { useAuthStore } from "./store/authStore";
 import { LoginForm } from "./components/auth/LoginForm";
 import { ChatLayout } from "./components/layout/ChatLayout";
@@ -24,9 +24,6 @@ function App() {
         }}
       >
         <CircularProgress size={40} />
-        <Typography variant="body1" color="text.secondary">
-          Loading...
-        </Typography>
       </Box>
     );
   }
