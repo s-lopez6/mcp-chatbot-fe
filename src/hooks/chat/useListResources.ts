@@ -5,6 +5,9 @@ import { QUERY_KEYS } from "../queryKeys";
 export const useListResources = () => {
   return useQuery({
     queryKey: [QUERY_KEYS.RESOURCES],
-    queryFn: () => chatApi.listResources(),
+    queryFn: async () => {
+      const res = await chatApi.listResources();
+      return res.data;
+    },
   });
 };

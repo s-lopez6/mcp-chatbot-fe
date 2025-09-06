@@ -7,6 +7,9 @@ export const useListTools = () => {
     queryKey: [QUERY_KEYS.TOOLS],
     queryFn: async () => {
       const res = await chatApi.listTools();
+
+      console.log("🚀 ~ useListTools ~ res:", res.data.tools);
+
       return res.data;
     },
   });

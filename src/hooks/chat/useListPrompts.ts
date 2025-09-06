@@ -5,6 +5,9 @@ import { QUERY_KEYS } from "../queryKeys";
 export const useListPrompts = () => {
   return useQuery({
     queryKey: [QUERY_KEYS.PROMPTS],
-    queryFn: () => chatApi.listPrompts(),
+    queryFn: async () => {
+      const res = await chatApi.listPrompts();
+      return res.data;
+    },
   });
 };

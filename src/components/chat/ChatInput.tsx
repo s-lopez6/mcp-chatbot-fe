@@ -1,22 +1,22 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Box, TextField, IconButton, Paper } from "@mui/material";
+import { Box, TextField, IconButton, Paper, Tooltip } from "@mui/material";
 import { Send } from "@mui/icons-material";
 import { useNavigate, useParams } from "react-router-dom";
 import { useCreateCompletion } from "../../hooks/chat/useCreateCompletion";
 import { useCreateChat } from "../../hooks/chat/useCreateChat";
 import { useSnackbar } from "../../contexts/SnackbarContext";
 
-interface ChatInputProps {
-  placeholder?: string;
-}
+import ChatInputMenu from "./ChatInputMenu";
 
-export const ChatInput: React.FC<ChatInputProps> = ({
-  placeholder = "Type your message...",
-}) => {
+const DEFAULT_PLACEHOLDER = "Type your message...";
+
+export const ChatInput = () => {
   const { chatId } = useParams<{ chatId?: string }>();
   const inputRef = useRef<HTMLInputElement>(null);
+  const inpuContainerRef = useRef<HTMLInputElement>(null);
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
+  const [openMenu, setOpenMenu] = useState(false);
 
   const { showInfo } = useSnackbar();
 
@@ -80,62 +80,94 @@ export const ChatInput: React.FC<ChatInputProps> = ({
     }
   };
 
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const newInput = e.target.value;
+    setMessage(newInput);
+    const openMenu = newInput === "/";
+    setOpenMenu(openMenu);
+  };
+
+  const handleClose = () => {
+    setOpenMenu(false);
+  };
+
   return (
-    <Paper
-      elevation={0}
-      sx={{
-        p: 2,
-        bgcolor: "background.default",
-      }}
-    >
-      <Box
-        component="form"
-        onSubmit={handleSubmit}
+    <>
+      <Paper
+        elevation={0}
         sx={{
-          display: "flex",
-          alignItems: "flex-end",
-          gap: 1,
+          p: 2,
+          bgcolor: "background.default",
         }}
       >
-        <TextField
-          color="primary"
-          fullWidth
-          inputRef={inputRef}
-          multiline
-          maxRows={4}
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          onKeyDown={handleKeyDown}
-          placeholder={placeholder}
-          variant="outlined"
-          size="small"
-          InputProps={{
-            sx: {
-              borderRadius: 3,
-              bgcolor: "background.paper",
-            },
-          }}
-        />
-        <IconButton
-          type="submit"
-          disabled={!message.trim() || disabled}
-          color="primary"
+        {/* <Tooltip
+        title="Add"
+        open={true}
+        slots={{
+          transition: Fade,
+        }}
+        slotProps={{
+          transition: { timeout: 600 },
+        }}
+      > */}
+        <Box
+          ref={inpuContainerRef}
+          component="form"
+          onSubmit={handleSubmit}
           sx={{
-            bgcolor: "primary.main",
-            color: "primary.contrastText",
-            "&:hover": {
-              bgcolor: "primary.dark",
-            },
-            "&:disabled": {
-              bgcolor: "action.disabled",
-              color: "action.disabled",
-            },
+            display: "flex",
+            alignItems: "flex-end",
+            gap: 1,
           }}
         >
-          <Send />
-        </IconButton>
-      </Box>
-    </Paper>
+          <TextField
+            color="primary"
+            fullWidth
+            inputRef={inputRef}
+            multiline
+            maxRows={4}
+            value={message}
+            onChange={handleInputChange}
+            onKeyDown={handleKeyDown}
+            placeholder={DEFAULT_PLACEHOLDER}
+            variant="outlined"
+            size="small"
+            InputProps={{
+              sx: {
+                borderRadius: 3,
+                bgcolor: "background.paper",
+              },
+            }}
+          />
+          <IconButton
+            type="submit"
+            disabled={!message.trim() || disabled}
+            color="primary"
+            sx={{
+              bgcolor: "primary.main",
+              color: "primary.contrastText",
+              "&:hover": {
+                bgcolor: "primary.dark",
+              },
+              "&:disabled": {
+                bgcolor: "action.disabled",
+                color: "action.disabled",
+              },
+            }}
+          >
+            <Send />
+          </IconButton>
+        </Box>
+        {/* </Tooltip> */}
+      </Paper>
+      <ChatInputMenu
+        open={openMenu}
+        anchorEl={inpuContainerRef.current!}
+        onClose={handleClose}
+      />
+    </>
   );
 };
 // todo auto focus input

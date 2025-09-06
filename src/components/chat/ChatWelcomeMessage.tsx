@@ -3,6 +3,7 @@ import { Avatar, Box, Typography } from "@mui/material";
 import { ChatInput } from "./ChatInput";
 
 import { env } from "../../config/env";
+import ChatInputMenu from "./ChatInputMenu";
 
 export const ChatWelcomeMessage = () => {
   return (
@@ -53,7 +54,7 @@ export const ChatWelcomeMessage = () => {
         </Typography>
       </Box>
 
-      <ChatInput placeholder="Start a new conversation..." />
+      <ChatInput />
     </Box>
   );
 };

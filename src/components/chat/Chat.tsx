@@ -16,6 +16,7 @@ import { useSnackbar } from "../../contexts/SnackbarContext";
 import { ChatWelcomeMessage } from "./ChatWelcomeMessage";
 import { ChatHeader } from "./ChatHeader";
 import { ChatMessagesList } from "./ChatMessagesList";
+import ChatInputMenu from "./ChatInputMenu";
 
 export const Chat = () => {
   const { chatId } = useParams<{ chatId?: string }>();
